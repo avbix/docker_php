@@ -1,40 +1,40 @@
-version: '3' # Версия файла Docker Compose
+version: '3' # Docker Compose file version.
 
 services:
   nginx:
-    container_name: nginx # Название контейнера для службы Nginx.
-    image: nginx # Используемый образ Docker для Nginx.
+    container_name: nginx # Container name for the Nginx service.
+    image: nginx # Docker image used for Nginx.
     ports:
-      - 80:80 # Отображение порта 80 внутри контейнера на порт 80 хоста.
+      - 80:80 # Mapping port 80 inside the container to port 80 on the host.
     volumes:
-      - ./vhost.conf:/etc/nginx/conf.d/default.conf # Монтирование локального файла конфигурации в контейнер Nginx.
-      - ./www:/var/www/public_html # Монтирование локальной директории в директорию /var/www/public_html в контейнере.
+      - ./vhost.conf:/etc/nginx/conf.d/default.conf # Mounting a local configuration file into the Nginx container.
+      - ./www:/var/www/public_html # Mounting a local directory into /var/www/public_html within the container.
     depends_on:
       - php
-      - mysql # Ожидание запуска службы PHP и MySQL перед запуском Nginx.
+      - mysql # Waiting for the PHP and MySQL services to start before launching Nginx.
 
   php:
-    container_name: php # Название контейнера для службы PHP.
-    build: ./www # Путь к директории с Dockerfile для создания образа контейнера.
+    container_name: php # Container name for the PHP service.
+    build: ./www # Path to the directory with a Dockerfile for creating the container image.
     volumes:
-      - ./www:/var/www/public_html # Монтирование локальной директории в директорию /var/www/public_html в контейнере.
+      - ./www:/var/www/public_html # Mounting a local directory into /var/www/public_html within the container.
     depends_on:
-      - mysql # Ожидание запуска службы MySQL перед запуском PHP.
+      - mysql # Waiting for the MySQL service to start before launching PHP.
 
   mysql:
-    container_name: mysql # Название контейнера для службы MySQL.
-    image: mysql # Используемый образ Docker для MySQL.
+    container_name: mysql # Container name for the MySQL service.
+    image: mysql # Docker image used for MySQL.
     volumes:
-      - ./mysql-data:/var/lib/mysql # Монтирование локальной директории для хранения данных MySQL.
+      - ./mysql-data:/var/lib/mysql # Mounting a local directory for storing MySQL data.
     environment:
-      - MYSQL_ROOT_PASSWORD=root # Установка пароля для пользователя root MySQL.
+      - MYSQL_ROOT_PASSWORD=root # Setting the password for the MySQL root user.
 
   phpmyadmin:
-    container_name: phpmyadmin # Название контейнера для службы phpMyAdmin.
-    image: phpmyadmin # Используемый образ Docker для phpMyAdmin.
+    container_name: phpmyadmin # Container name for the phpMyAdmin service.
+    image: phpmyadmin # Docker image used for phpMyAdmin.
     ports:
-      - 1500:80 # Отображение порта 1500 внутри контейнера на порт 80 хоста.
+      - 1500:80 # Mapping port 1500 inside the container to port 80 on the host.
     environment:
-      - PMA_HOST=mysql # Указание хоста MySQL, к которому будет подключаться phpMyAdmin.
+      - PMA_HOST=mysql # Specifying the MySQL host to which phpMyAdmin will connect.
     depends_on:
-      - mysql # Ожидание запуска службы MySQL перед запуском phpMyAdmin.
+      - mysql # Waiting for the MySQL service to start before launching phpMyAdmin.

@@ -1,11 +1,11 @@
-# Используем базовый образ PHP 8.1 FPM.
+# Use the base PHP 8.1 FPM image.
 FROM php:8.1-fpm
 
-# Устанавливаем расширения PHP для поддержки работы с базой данных MySQL (pdo и pdo_mysql).
+# Install PHP extensions for MySQL database support (pdo and pdo_mysql).
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Устанавливаем рабочий каталог внутри контейнера.
+# Set the working directory inside the container.
 WORKDIR /var/www/public_html
 
-# Запускаем PHP-FPM как команду по умолчанию для контейнера.
+# Start PHP-FPM as the default command for the container.
 CMD [ "php-fpm" ]
